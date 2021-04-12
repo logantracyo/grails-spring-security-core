@@ -15,8 +15,8 @@ jobs:
         java: [ '8', '11' ]
 
     steps:
-      - uses: action/checkout@v2
-      - uses: action/cache@v2
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
         with:
           path: ~/gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
