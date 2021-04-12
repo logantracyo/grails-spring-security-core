@@ -1,3 +1,6 @@
+branches:
+  except:
+    - githubAction
 addons:
   chrome: stable
 language: groovy
