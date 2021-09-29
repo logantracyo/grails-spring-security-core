@@ -23,9 +23,10 @@ jobs:
           restore-keys: |
             ${{ runner.os}}-gradle-
       - name: Setup JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java }}
+          distribution: 'adopt'
       - name: Run Spring Security Core Tests
         run: ./gradlew -Dgeb.env=chromeHeadless :spring-security-core:check --console=plain
       - name: Publish Test Report
@@ -34,3 +35,51 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_paths: '**/plugin/build/test-results/test/TEST-*.xml'
+      - name: Install Plugin Locally
+        run: ./gradlew :spring-security-core:install --console=plain
+      - name: Run Integration Test App
+        run: ./gradlew -Dgeb.env=chromeHeadless :integration-test-app:check --console=plain
+      - name: Publish Test Report
+        if: failure()
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_paths: '**/integration-test-app/build/test-results/test/TEST-*.xml'
+      - name: Misc Group Tests
+        run: ./gradlew -Dgeb.env=chromeHeadless :misc-group:check --console=plain
+      - name: Publish Test Report
+        if: failure()
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_paths: '**/misc-functional-test-app/grails-spring-security-group/build/test-results/test/TEST-*.xml'
+      - name: Misc Hierarchical Roles Tests
+        run: ./gradlew  -Dgeb.env=chromeHeadless :misc-hierarchical-roles:check --console=plain
+      - name: Publish Test Report
+        if: failure()
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_paths: '**/misc-functional-test-app/grails-spring-security-hierarchical-roles/build/test-results/test/TEST-*.xml'
+      - name: Static Functional Test App
+        run: ./gradlew -DTESTCONFIG=static -Dgeb.env=chromeHeadless functional-test-app:check  --console=plain
+      - name: Annotation Functional Test App
+        run: ./gradlew -DTESTCONFIG=annotation -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Request-Map Functional Test App
+        run: ./gradlew -DTESTCONFIG=requestmap -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Basic Functional Test App
+        run: ./gradlew -DTESTCONFIG=basic -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Misc Functional Test App
+        run: ./gradlew -DTESTCONFIG=misc -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Put With Params Functional Test App
+        run: ./gradlew -DTESTCONFIG=putWithParams -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Bcrypt Functional Test App
+        run: ./gradlew -DTESTCONFIG=bcrypt -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Issue 503 Functional Tests
+        run: ./gradlew -DTESTCONFIG=issue503 -Dgeb.env=chromeHeadless functional-test-app:check --console=plain
+      - name: Publish Test Report
+        if: failure()
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_paths: '**/functional-test-app/build/test-results/test/TEST-*.xml'
