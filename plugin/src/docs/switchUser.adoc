@@ -95,15 +95,15 @@ grails.plugin.springsecurity.switchUser.switchFailureUrl = ...
 
 |switchUser.exitUserUrl
 |"`/logout/impersonate`"
-|URL to access (via POST) to switch to another user
+|URL to access (via POST) to exit switch user and return to the original user
 
 |switchUser.switchUserMatcher
 |`SwitchUserFilter.switchUserMatcher`
-|An alternative to `switchUserUrl`, define an `AntPathRequestMatcher` to determine if a request needs to switch user.
+|An alternative to `switchUserUrl`, define an `AntPathRequestMatcher` to determine if a request needs to switch user
 
 |switchUser.exitUserMatcher
 |`SwitchUserFilter.exitUserMatcher`
-|An alternative to `exitUserUrl`, define an `AntPathRequestMatcher` to determine if a request needs to exit switch user.
+|An alternative to `exitUserUrl`, define an `AntPathRequestMatcher` to determine if a request needs to exit switch user
 
 |switchUser.targetUrl
 |Same as `successHandler.defaultTargetUrl`
